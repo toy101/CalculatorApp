@@ -32,7 +32,11 @@ class ViewController: UIViewController {
 	@IBAction func buttons(_ sender: UIButton) {
 		//数字が表示されている&演算子が抑えれた時
 		if lable.text != "" && sender.tag != 11 && sender.tag != 16{
-			previousNumber = Double(lable.text!)!
+			
+			if performingMath == false{
+				previousNumber = Double(lable.text!)!
+			}
+			
 			if sender.tag == 12{	//割り算
 				lable.text = "÷"
 			}
