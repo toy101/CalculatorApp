@@ -10,10 +10,33 @@ import UIKit
 
 class ViewController: UIViewController {
 	
-	var numberOnScreen:Double = 0;	//画面上の数字
-	var previousNumber:Double = 0;	//前の画面に表示されていた数字
+	var numberOnScreen:Double = 0	//画面上の数字
+	var previousNumber:Double = 0	//前の画面に表示されていた数字
+	var resultNumber:Double = 0		//計算結果
 	var performingMath = false
-	var operation = 0;	// 演算子
+	var flagContinutyCalculate = false
+	var operation = 0	// 演算子
+	
+	func calculate(leftNum: Double, rigftNum: Double, operation: Int) -> Double{
+		
+		var result:Double = 0
+		
+		if operation == 12{
+			result = leftNum / rigftNum
+		}
+		else if operation == 13{
+			result = leftNum * rigftNum
+		}
+		else if operation == 14{
+			result = leftNum - rigftNum
+		}
+		else if operation == 15{
+			result = leftNum + rigftNum
+		}
+		
+		return result
+		
+	}
 
 	@IBOutlet weak var lable: UILabel!
 	
@@ -30,6 +53,13 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func buttons(_ sender: UIButton) {
+		if flagContinutyCalculate{
+			if resultNumber == 0{
+				resultNumber = calculate(leftNum: previousNumber, rigftNum: numberOnScreen, operation: operation)
+			}else{
+				resultNumber = calculate(leftNum: resultNumber, rigftNum: numberOnScreen, operation: operation)
+			}
+		}
 		//数字が表示されている&演算子が抑えれた時
 		if lable.text != "" && sender.tag != 11 && sender.tag != 16{
 			
@@ -51,26 +81,21 @@ class ViewController: UIViewController {
 			}
 			operation = sender.tag
 			performingMath = true
+			
+			flagContinutyCalculate = true
 		}
 		else if sender.tag == 16{	//イコール
-			if operation == 12{
-				lable.text = String(previousNumber / numberOnScreen)
-			}
-			else if operation == 13{
-				lable.text = String(previousNumber * numberOnScreen)
-			}
-			else if operation == 14{
-				lable.text = String(previousNumber - numberOnScreen)
-			}
-			else if operation == 15{
-				lable.text = String(previousNumber + numberOnScreen)
-			}
+			lable.text = String(resultNumber)
+			flagContinutyCalculate = false
 		}
 		else if sender.tag == 11{	//クリア
 			lable.text = ""
-			previousNumber = 0;
-			numberOnScreen = 0;
-			operation = 0;
+			previousNumber = 0
+			numberOnScreen = 0
+			resultNumber = 0
+			operation = 0
+			flagContinutyCalculate = false
+			performingMath = false
 		}
 	}
 	
